@@ -1,4 +1,4 @@
-#r "C:\\Users\\Andrew\\source\\repos\\Recommendation Engine\\packages\\FSharp.Data.2.4.6\\lib\\net45\\FSharp.Data.dll"
+#r "C:\\Users\\Andrew\\source\\repos\\CPSC326_Recommendation_Engine\\packages\\FSharp.Data.2.4.6\\lib\\net45\\FSharp.Data.dll"
 
 open FSharp.Data
 open System
@@ -26,12 +26,22 @@ for row in degree_data.Rows do
     printfn "(degrees-that-pay-back) %A: %A, %A, %A, %A, %A, %A, %A" row.``Undergraduate Major`` row.``Starting Median Salary`` row.``Mid-Career Median Salary`` row.``Percent change from Starting to Mid-Career Salary`` row.``Mid-Career 10th Percentile Salary`` row.``Mid-Career 25th Percentile Salary`` row.``Mid-Career 75th Percentile Salary`` row.``Mid-Career 90th Percentile Salary``
 
 
-printfn "Input a region, major, and college type you would like in the following form:"
-let userInput = Console.ReadLine()
+printfn "Input a region, major, and college type you would like in the following form: \n region,major,type"
+let userInput = Console.ReadLine().Split ','
 
 let return_regions c = data.Filter(fun row -> (String.Compare(row.Region, c, StringComparison.OrdinalIgnoreCase) = 0))
 let return_majors c = degree_data.Filter(fun row -> (String.Compare(row.``Undergraduate Major``, c, StringComparison.OrdinalIgnoreCase) = 0))
 let return_college_type c = college_type_data.Filter(fun row -> (String.Compare(row.``School Type``, c, StringComparison.OrdinalIgnoreCase) = 0))
 
-for row in (return_regions userInput).Rows do
+for row in (return_regions userInput.[0]).Rows do
+    printfn "%A" row.``School Name``
+
+printfn "Break in for loop"
+
+for row in (return_majors userInput.[1]).Rows do
+    printfn "%A" row.``Starting Median Salary``
+
+printfn "Break in for loop"
+
+for row in (return_college_type userInput.[2]).Rows do
     printfn "%A" row.``School Name``
