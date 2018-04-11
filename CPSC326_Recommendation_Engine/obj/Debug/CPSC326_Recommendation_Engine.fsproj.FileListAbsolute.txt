@@ -1,0 +1,15 @@
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\CPSC326_Recommendation_Engine.exe.config
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\CPSC326_Recommendation_Engine.XML
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\CPSC326_Recommendation_Engine.exe
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\CPSC326_Recommendation_Engine.pdb
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\FSharp.Core.dll
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\FSharp.Data.dll
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\System.ValueTuple.dll
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\FSharp.Data.pdb
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\FSharp.Data.xml
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\bin\Debug\FSharp.Core.xml
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\obj\Debug\CPSC326_Recommendation_Engine.fsprojResolveAssemblyReference.cache
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\obj\Debug\CPSC326_Recommendation_Engine.exe.config
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\obj\Debug\CPSC326_Recommendation_Engine.fsproj.CopyComplete
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\obj\Debug\CPSC326_Recommendation_Engine.exe
+C:\Users\Andrew\source\repos\CPSC326_Recommendation_Engine\CPSC326_Recommendation_Engine\obj\Debug\CPSC326_Recommendation_Engine.pdb

@@ -36,12 +36,12 @@ let return_college_type c = college_type_data.Filter(fun row -> (String.Compare(
 for row in (return_regions userInput.[0]).Rows do
     printfn "%A" row.``School Name``
 
-printfn "Break in for loop"
+printfn "\n Following line is for major: %A" userInput.[1]
 
 for row in (return_majors userInput.[1]).Rows do
     printfn "%A" row.``Starting Median Salary``
 
-printfn "Break in for loop"
+printfn "\n Following lines are regarding school type"
 
 for row in (return_college_type userInput.[2]).Rows do
     printfn "%A" row.``School Name``
