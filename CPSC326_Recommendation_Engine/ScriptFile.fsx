@@ -1,5 +1,5 @@
-#r "C:\\Users\\Andrew\\source\\repos\\CPSC326_Recommendation_Engine\\packages\\FSharp.Data.2.4.6\\lib\\net45\\FSharp.Data.dll"
-
+// Learn more about F# at http://fsharp.org
+#r "C:\\Users\\Carlos\\.nuget\\packages\\fsharp.data\\2.4.6\\lib\\net45\\FSharp.Data.dll"
 open FSharp.Data
 open System
 
