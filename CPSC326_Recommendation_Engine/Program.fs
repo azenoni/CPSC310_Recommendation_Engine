@@ -24,20 +24,18 @@ let return_college_type c = college_type_data.Filter(fun row -> (String.Compare(
 
 let combine_college_region_and_major = (return_regions userInput.[0]).Filter(fun row -> (Decimal.Compare(row.``Starting Median Salary``, (return_majors userInput.[1]).``Starting Median Salary``) > 0))
 
-let remaining_colleges lst = 
-    let myLst = []
-    for row in combine_college_region_and_major.Rows do
-        let list1 = (return_college_type userInput.[2]).Filter(fun typeRow -> (String.Compare(row.``School Name``, typeRow.``School Name``, StringComparison.OrdinalIgnoreCase) = 0))
-        for myRow in list1.Rows do
-            let someLst = myRow :: myLst
-            lst @ someLst
-    lst
+//Filters on first row, but not others
+//let run_through_college_type = 
+//    (return_college_type userInput.[2]).Filter(fun row -> (String.Compare(row.``School Name``, (combine_college_region_and_major.Rows |> Seq.head).``School Name``) = 0))
 
-//let find_remaining_colleges lst continueRunning rows = 
-//    if continueRunning = false then
-//        lst
-//    else 
-//        find_remaining_colleges (return_college_type userInput.[2].Filter(fun typeRow -> (String.Compare(row.``School Name``, typeRow.``School Name``, StringComparison.OrdinalIgnoreCase) = 0)) :: lst)
+let lst = []
+//let comparison = 
+//    for row in combine_college_region_and_major.Rows do
+//        for otherRow in (return_college_type userInput.[2]).Rows do
+//            if (row.``School Name`` = otherRow.``School Name``) then
+//                printfn "%A" row.``School Name``
+
+
 [<EntryPoint>]
 let main argv = 
     printfn "%A" argv
@@ -74,11 +72,14 @@ let main argv =
     for row in (combine_college_region_and_major).Rows do
         printfn "%A" row.``School Name``
 
-   
-    printfn "Your filtered results are:"
-    for name in remaining_colleges [] do
-        printfn "%A" name
 
+    Console.ReadLine()
+
+    printfn "Final results are: "
+    for row in combine_college_region_and_major.Rows do
+        for otherRow in (return_college_type userInput.[2]).Rows do
+            if (row.``School Name`` = otherRow.``School Name``) then
+                printfn "%A with a median starting salary of %A in the %A region" row.``School Name`` row.``Starting Median Salary`` row.Region
     Console.ReadLine()
     
     0 // return an integer exit code
