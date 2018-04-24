@@ -22,13 +22,17 @@ let return_regions c = data.Filter(fun row -> (String.Compare(row.Region, c, Str
 let return_majors c = degree_data.Filter(fun row -> (String.Compare(row.``Undergraduate Major``, c, StringComparison.OrdinalIgnoreCase) = 0)).Rows |> Seq.head
 let return_college_type c = college_type_data.Filter(fun row -> (String.Compare(row.``School Type``, c, StringComparison.OrdinalIgnoreCase) = 0))
 
-let combine_college_region_and_major = (return_regions userInput.[0]).Filter(fun row -> (Decimal.Compare(row.``Starting Median Salary``, (return_majors userInput.[1]).``Starting Median Salary``) > 0))
+let calculate_major_benchmark = 
+    if ((return_majors userInput.[1]).``Starting Median Salary``) > 55000M then ((return_majors userInput.[1]).``Starting Median Salary`` - 7000M)
+    else (return_majors userInput.[1]).``Starting Median Salary``
+
+let combine_college_region_and_major = (return_regions userInput.[0]).Filter(fun row -> (Decimal.Compare(row.``Starting Median Salary``, calculate_major_benchmark) > 0))
 
 //Filters on first row, but not others
 //let run_through_college_type = 
 //    (return_college_type userInput.[2]).Filter(fun row -> (String.Compare(row.``School Name``, (combine_college_region_and_major.Rows |> Seq.head).``School Name``) = 0))
 
-let lst = []
+//Implemented in last section of main argv...
 //let comparison = 
 //    for row in combine_college_region_and_major.Rows do
 //        for otherRow in (return_college_type userInput.[2]).Rows do
@@ -67,7 +71,7 @@ let main argv =
         printfn "%A" row.``School Name``
 
     printfn ""
-    printfn "Your resutls for a %A school with starting median salary %A are:" userInput.[0] (return_majors userInput.[1]).``Starting Median Salary``
+    printfn "Your resutls for a %A school with starting median salary %A are:" userInput.[0] calculate_major_benchmark
     Console.ReadLine()
     for row in (combine_college_region_and_major).Rows do
         printfn "%A" row.``School Name``
