@@ -1,89 +1,71 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
+﻿//Kurt Lamon, Carlos Villagomez, Andrew Zenoni
+//CPSC326 - Organization of Programming Languages
+//May 5th, 2018
+//v 1.0.0
 
+
+//Open desired libraries
 open FSharp.Data
 open System
 
-printfn "The program will pause throughout execution, press enter to continue"
-printfn "Input a region, major, and college type you would like in the following form: \n region,major,type"
-
+//Used to grab information from "salaries-by-region.csv"
 type schools_by_region = CsvProvider<"salaries-by-region.csv">
-let data = schools_by_region.Load("salaries-by-region.csv")
+let region_data = schools_by_region.Load("salaries-by-region.csv")
 
+//Used to grab information from "salaries-by-college-type.csv"
 type salaries_by_college_type = CsvProvider<"salaries-by-college-type.csv">
 let college_type_data = salaries_by_college_type.Load("salaries-by-college-type.csv")
 
+//Used to grab information from "degrees-that-pay-back.csv"
 type degrees_that_payback = CsvProvider<"degrees-that-pay-back.csv">
 let degree_data  = degrees_that_payback.Load("degrees-that-pay-back.csv")
 
-let userInput = Console.ReadLine().Split ','
+//Based on the user input, goes through and returns all applicable schools in the "salaries-by-retion.csv" file
+let return_regions userInput = 
+    [for c in userInput do
+        for x in region_data.Rows do
+            if String.Compare(c, x.Region, StringComparison.OrdinalIgnoreCase) = 0 then
+                yield x.``School Name``, x.Region, x.``Starting Median Salary``]
 
-let return_regions c = data.Filter(fun row -> (String.Compare(row.Region, c, StringComparison.OrdinalIgnoreCase) = 0))
-let return_majors c = degree_data.Filter(fun row -> (String.Compare(row.``Undergraduate Major``, c, StringComparison.OrdinalIgnoreCase) = 0)).Rows |> Seq.head
-let return_college_type c = college_type_data.Filter(fun row -> (String.Compare(row.``School Type``, c, StringComparison.OrdinalIgnoreCase) = 0))
+//Based on the user input, goes through and returns all applicable schools in the "degrees-that-pay-back.csv" file
+let return_majors userInput = 
+    [for c in userInput do
+        for x in degree_data.Rows do
+            if String.Compare(c, x.``Undergraduate Major``, StringComparison.OrdinalIgnoreCase) = 0 then
+                yield x.``Undergraduate Major``, x.``Starting Median Salary``]
 
-let calculate_major_benchmark = 
-    if ((return_majors userInput.[1]).``Starting Median Salary``) > 55000M then ((return_majors userInput.[1]).``Starting Median Salary`` - 7000M)
-    else (return_majors userInput.[1]).``Starting Median Salary``
+//Based on the user input, goes through and returns all applicable schools in the "salaries-by-college-type.csv" file
+let return_college_type userInput = 
+    [for c in userInput do
+        for x in college_type_data.Rows do
+            if String.Compare(c, x.``School Type``, StringComparison.OrdinalIgnoreCase) = 0 then
+                yield x.``School Name``, x.``School Type``, x.``Starting Median Salary``]
 
-let combine_college_region_and_major = (return_regions userInput.[0]).Filter(fun row -> (Decimal.Compare(row.``Starting Median Salary``, calculate_major_benchmark) > 0))
-
-//Filters on first row, but not others
-//let run_through_college_type = 
-//    (return_college_type userInput.[2]).Filter(fun row -> (String.Compare(row.``School Name``, (combine_college_region_and_major.Rows |> Seq.head).``School Name``) = 0))
-
-//Implemented in last section of main argv...
-//let comparison = 
-//    for row in combine_college_region_and_major.Rows do
-//        for otherRow in (return_college_type userInput.[2]).Rows do
-//            if (row.``School Name`` = otherRow.``School Name``) then
-//                printfn "%A" row.``School Name``
-
+//Performs comparisons based on the information that the user has inputted
+let comparison (regions : (String*String*Decimal) List) (majors : (String*Decimal) List) (types : (String*String*Decimal) List) = 
+    [ for region_name,region,region_salary in regions do
+        for major,major_salary in majors do
+            for type_name,single_type,_ in types do
+                if (String.Compare(region_name, type_name, StringComparison.OrdinalIgnoreCase) = 0) && (Decimal.Compare(region_salary, major_salary) > 0) then
+                    yield region_name, region, single_type, major]
 
 [<EntryPoint>]
-let main argv = 
-    printfn "%A" argv
+let main _ = 
 
-    for row in data.Rows do
-        printfn "(schools-by-region) %A: %A, %A, %A, %A, %A, %A, %A " row.``School Name`` row.Region row.``Starting Median Salary`` row.``Mid-Career 10th Percentile Salary`` row.``Mid-Career 25th Percentile Salary`` row.``Mid-Career 75th Percentile Salary`` row.``Mid-Career 90th Percentile Salary`` row.``Mid-Career 90th Percentile Salary``
+    printfn "Please input the regions from the list below you would like to go to school in (seperated by commas, no spaces):\n California, Western, Midwestern, Southern, Northeastern \n"
+    let userDefinedRegions = return_regions (Console.ReadLine().Split ',')
 
+    printfn "\nPlease input the majors from the list below you would like to possible major in (seperated by commas, no spaces):\n Accounting, Aerospace Engineering, Agriculture, Anthropology, Architecture, Art History, Biology, Business Management, Chemical Engineering, Chemistry, Civil Engineering, Communications, Computer Engineering, Computer Science, Construction, Criminal Justice, Drama, Economics, Education, Electrical Engineering, English, Film, Finance, Forestry, Geography, Geology, Graphic Design, Health Care Administration, History, Hospitality & Tourism, Industrial Engineering, Information Technology (IT), Interior Design, International Relations, Journalism, Management Information Systems (MIS), Marketing, Math, Mechanical Engineering, Music, Nursing, Nutrition, Philosphy, Physician Assistant, Physics, Political Science, Psychology, Religion, Sociology, Spanish\n"
+    let userDefinedMajors = return_majors (Console.ReadLine().Split ',')
+
+    printfn "\nPlease input the types of schools you are interested in from the list below (seperate by commas, no spaces):\n Engineering, Party, Liberal Arts, Ivy League, State\n"
+    let userDefinedTypes = return_college_type (Console.ReadLine().Split ',')
+
+    printfn "Press enter to see your filtered results:"
     Console.ReadLine()
-    for row in college_type_data.Rows do
-        printfn "(salaries-by-college-type) %A: %A, %A, %A, %A, %A, %A, %A " row.``School Name`` row.``School Type`` row.``Starting Median Salary`` row.``Mid-Career Median Salary`` row.``Mid-Career 10th Percentile Salary`` row.``Mid-Career 25th Percentile Salary`` row.``Mid-Career 75th Percentile Salary`` row.``Mid-Career 90th Percentile Salary``
+    for school in comparison userDefinedRegions userDefinedMajors userDefinedTypes do
+        printfn "%A" school
 
-    Console.ReadLine()
-    for row in degree_data.Rows do
-        printfn "(degrees-that-pay-back) %A: %A, %A, %A, %A, %A, %A, %A" row.``Undergraduate Major`` row.``Starting Median Salary`` row.``Mid-Career Median Salary`` row.``Percent change from Starting to Mid-Career Salary`` row.``Mid-Career 10th Percentile Salary`` row.``Mid-Career 25th Percentile Salary`` row.``Mid-Career 75th Percentile Salary`` row.``Mid-Career 90th Percentile Salary``
-
-    Console.ReadLine()
-    for row in (return_regions userInput.[0]).Rows do
-        printfn "%A" row.``School Name``
-
-    printfn "\n Following line is for major: %A" userInput.[1]
-
-    Console.ReadLine()
-    printfn "%A" (return_majors userInput.[1]).``Starting Median Salary``
-
-    printfn "\n Following lines are regarding school type"
-
-    Console.ReadLine()
-    for row in (return_college_type userInput.[2]).Rows do
-        printfn "%A" row.``School Name``
-
-    printfn ""
-    printfn "Your resutls for a %A school with starting median salary %A are:" userInput.[0] calculate_major_benchmark
-    Console.ReadLine()
-    for row in (combine_college_region_and_major).Rows do
-        printfn "%A" row.``School Name``
-
-
-    Console.ReadLine()
-
-    printfn "Final results are: "
-    for row in combine_college_region_and_major.Rows do
-        for otherRow in (return_college_type userInput.[2]).Rows do
-            if (row.``School Name`` = otherRow.``School Name``) then
-                printfn "%A with a median starting salary of %A in the %A region" row.``School Name`` row.``Starting Median Salary`` row.Region
     Console.ReadLine()
     
     0 // return an integer exit code
